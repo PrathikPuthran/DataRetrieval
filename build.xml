@@ -1,0 +1,40 @@
+<project name="Search" basedir="." default="clean-build">
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="build"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="jar.dir" value="${build.dir}/bin"/>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+	
+	<path id="classpath">
+		<fileset dir="${build.dir}/lib/" includes="**/*.jar"/>
+	</path>
+		
+	<target name="copyLib">
+		<copy todir="${build.dir}/lib">
+			<fileset dir="lib"/>
+		</copy>
+	</target>
+	
+	<target name="compile" depends="copyLib">
+		<mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+			<classpath refid="classpath"/>
+		</javac>
+	</target>
+	
+	<target name="jar" depends="compile">
+		<mkdir dir="${build.dir}/bin"/>
+		<jar destfile="${build.dir}/bin/app.jar" basedir="${build.dir}/classes"> 
+	    <manifest>
+	      <attribute name="Main-Class" value="data.retrieval.Application"/>
+	      <attribute name="Class-Path" value="../lib/gson-2.2.4.jar"/>
+	    </manifest>
+		</jar>
+	</target>
+	
+	<target name="clean-build" depends="clean, jar"/>
+	
+</project>
